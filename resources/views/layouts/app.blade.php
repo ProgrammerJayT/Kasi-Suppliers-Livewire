@@ -27,7 +27,8 @@
 
 </head>
 
-<body>
+<body style="overflow: hidden;">
+    @include('partials/_black_bar')
 
     {{ $slot }}
 
