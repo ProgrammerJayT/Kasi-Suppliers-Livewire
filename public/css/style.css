@@ -954,7 +954,7 @@ ol {
 }
 
 .product__item:hover .product__item__pic .product__hover {
-	right: 20px;
+	right: 3px;
 	opacity: 1;
 }
 
@@ -973,7 +973,7 @@ ol {
 }
 
 .product__item__pic {
-	height: 260px;
+	height: 100px;
 	position: relative;
 	background-position: center center;
 }
