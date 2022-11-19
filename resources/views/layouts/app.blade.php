@@ -27,9 +27,8 @@
 
 </head>
 
-<body style="overflow: hidden;">
-    @include('partials/_black_bar')
-
+<body>
+    @livewire('partials.blackbar')
     {{ $slot }}
 
     @livewireScripts

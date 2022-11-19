@@ -1,0 +1,3 @@
+<div>
+    CUstomer shop
+</div>

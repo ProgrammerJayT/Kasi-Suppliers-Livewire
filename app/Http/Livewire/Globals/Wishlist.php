@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Globals;
 use Livewire\Component;
 use Illuminate\Support\Facades\Request;
 
-class Home extends Component
+class Wishlist extends Component
 {
     public $route, $privilege, $name, $surname;
 
@@ -16,13 +16,13 @@ class Home extends Component
             $this->surname = 'Login/Register';
             $this->privilege = 'admin';
         } else {
-            $this->name = '';
-            $this->surname = '';
-            $this->privilege = '';
+            $this->name = session()->get('profile')->name;
+            $this->surname = session()->get('profile')->surname;
+            $this->privilege = session()->get('account')->privilege;
         }
 
         $this->route = Request::route()->getName();
 
-        return view('livewire.globals.home');
+        return view('livewire.globals.wishlist');
     }
 }

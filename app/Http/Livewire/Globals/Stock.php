@@ -5,24 +5,31 @@ namespace App\Http\Livewire\Globals;
 use Livewire\Component;
 use Illuminate\Support\Facades\Request;
 
-class Home extends Component
+class Stock extends Component
 {
     public $route, $privilege, $name, $surname;
 
-    public function render()
+    protected $listeners = [
+        'itemAddRemove' => 'render'
+    ];
+
+    public function mount()
     {
         if (session()->has('adminTriggered')) {
             $this->name = 'Login/Register';
             $this->surname = 'Login/Register';
             $this->privilege = 'admin';
         } else {
-            $this->name = '';
-            $this->surname = '';
-            $this->privilege = '';
+            $this->name = session()->get('profile')->name;
+            $this->surname = session()->get('profile')->surname;
+            $this->privilege = session()->get('account')->privilege;
         }
-
         $this->route = Request::route()->getName();
+    }
 
-        return view('livewire.globals.home');
+    public function render()
+    {
+
+        return view('livewire.globals.stock');
     }
 }
