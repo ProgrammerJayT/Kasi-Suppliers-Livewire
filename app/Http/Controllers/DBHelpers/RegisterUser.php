@@ -56,10 +56,13 @@ class RegisterUser extends Controller
                     ]
                 );
 
-                return [
-                    'profile' => $newUserProfile,
-                    'account' => $newUserAccount
-                ];
+                return response(
+                    [
+                        'profile' => $newUserProfile,
+                        'account' => $newUserAccount
+                    ],
+                    201
+                );
 
             } catch (\Throwable $th) {
                 return response('Account creation failed. ' . $th->getMessage(), 424);
