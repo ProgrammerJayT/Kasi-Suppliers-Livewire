@@ -13,8 +13,10 @@ return new class extends Migration {
     public function up()
     {
         Schema::create(
-            'vendors', function (Blueprint $table) {
+            'vendors',
+            function (Blueprint $table) {
                 $table->id();
+                $table->string('stripe_id');
                 $table->integer('account_id');
                 $table->string('name');
                 $table->string('surname');

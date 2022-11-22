@@ -8,6 +8,7 @@ use App\Models\Account;
 use App\Models\Customer;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Stripe\StripeClient;
 
 class RegisterUser extends Controller
 {
@@ -22,6 +23,11 @@ class RegisterUser extends Controller
 
         //Create user's account
         try {
+
+            $stripe = new StripeClient(
+                'sk_test_51LtJ6yFbMgA6rjTxctvRfxHwqiufpodyvcnQPOPzs86Q264HHeCOtonVtNceMIsyJ1OV8JM3MYKEev9qTo3UsCqB00pMIbdVFi'
+            );
+
             $newUserAccount = Account::create(
                 [
                     'email' => $data['email'],
@@ -47,8 +53,17 @@ class RegisterUser extends Controller
 
             //Create user's profile
             try {
+
+                $createStripe = $stripe->customers->create([
+                    'name' => $data['name'] . ' ' . $data['surname'],
+                    'email' => $data['email']
+                ]);
+
+                // dd($createStripe);
+
                 $newUserProfile = $model->create(
                     [
+                        'stripe_id' => $createStripe->id,
                         'account_id' => $newUserAccount->id,
                         'name' => $data['name'],
                         'surname' => $data['surname'],

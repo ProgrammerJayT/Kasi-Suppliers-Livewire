@@ -1,5 +1,3 @@
-@livewire('partials.navbar')
-
 @if ($privilege == 'vendor')
-    @livewire('user.vendor.stock')
+    @livewire('user.stock.vendor')
 @endif

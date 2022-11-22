@@ -1,94 +1,91 @@
-@livewire('partials.navbar')
+<div>
+    <!-- Shop Section Begin -->
+    <section class="shop spad">
+        <div class="container">
 
-<!-- Hero Section Begin -->
-<section class="hero">
-    <div class="hero__slider owl-carousel">
-        <div class="hero__items set-bg" data-setbg="img/hero/hero-1.jpg">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-5 col-lg-7 col-md-8">
-                        <div class="hero__text">
-                            <h6>Summer Collection</h6>
-                            <h2>Fall - Winter Collections 2030</h2>
-                            <p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
-                                commitment to exceptional quality.</p>
-                            <a href="{{ route('shop') }}" class="primary-btn">Shop now <span
-                                    class="arrow_right"></span></a>
-                            {{-- <div class="hero__social">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-pinterest"></i></a>
-                                <a href="#"><i class="fa fa-instagram"></i></a>
-                            </div> --}}
+            @if (Session::has('add-success'))
+                <div class="alert alert-success" style="background-color: darkgreen;" role="alert">
+                    <p style="color: white; margin-bottom:0px;">{{ Session::get('add-success') }}
+                    </p>
+                </div>
+            @endif
+
+            @if (Session::has('add-fail'))
+                <div class="alert alert-danger" style="background-color: rgb(255, 0, 0);" role="alert">
+                    <p style="color: white; margin-bottom:0px;">{{ Session::get('add-fail') }}
+                    </p>
+                </div>
+            @endif
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="checkout__input">
+
+                                <input wire:model="search" type="text"
+                                    placeholder="Search for items here. E.g Tomatoes">
+
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <div class="checkout__input">
+                                <select wire:model="sort" class="form-control" style="width: 100%;margin-bottom:10px;">
+                                    <option value="price">Order by price</option>
+                                    <option value="name">Order by name</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <div class="checkout__input">
+                                <select wire:model="level" class="form-control" style="width: 100%;margin-bottom:10px;">
+                                    <option value="desc">Descending</option>
+                                    <option value="asc">Ascending</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="hero__items set-bg" data-setbg="img/hero/hero-2.jpg">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-5 col-lg-7 col-md-8">
-                        <div class="hero__text">
-                            <h6>Summer Collection</h6>
-                            <h2>Fall - Winter Collections 2030</h2>
-                            <p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
-                                commitment to exceptional quality.</p>
-                            <a href="{{ route('shop') }}" class="primary-btn">Shop now <span
-                                    class="arrow_right"></span></a>
-                            {{-- <div class="hero__social">
-                                    <a href="#"><i class="fa fa-facebook"></i></a>
-                                    <a href="#"><i class="fa fa-twitter"></i></a>
-                                    <a href="#"><i class="fa fa-pinterest"></i></a>
-                                    <a href="#"><i class="fa fa-instagram"></i></a>
-                                </div> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Hero Section End -->
 
-<!-- Banner Section Begin -->
-<section class="banner spad">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-7 offset-lg-4">
-                <div class="banner__item">
-                    <div class="banner__item__pic">
-                        <img src="img/banner/banner-1.jpg" alt="">
-                    </div>
-                    <div class="banner__item__text">
-                        <h2>Clothing Collections 2030</h2>
-                        <a href="{{ route('shop') }}">Shop now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-5">
-                <div class="banner__item banner__item--middle">
-                    <div class="banner__item__pic">
-                        <img src="img/banner/banner-2.jpg" alt="">
-                    </div>
-                    <div class="banner__item__text">
-                        <h2>Accessories</h2>
-                        <a href="{{ route('shop') }}">Shop now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-7">
-                <div class="banner__item banner__item--last">
-                    <div class="banner__item__pic">
-                        <img src="img/banner/banner-3.jpg" alt="">
-                    </div>
-                    <div class="banner__item__text">
-                        <h2>Shoes Spring 2030</h2>
-                        <a href="{{ route('shop') }}">Shop now</a>
+                    <div class="row">
+
+                        @unless(count($items) > 0)
+                            <div class="col-lg-12">
+                                <div class="shop__cart__item">
+                                    <h2>No items available</h2>
+                                </div>
+                            </div>
+                        @else
+                            @foreach ($items as $item)
+                                <div class="col-lg-3 col-md-6 col-sm-6">
+                                    <div class="product__item">
+
+                                        <div class="product__item__pic set-bg">
+                                            <img src="{{ asset($item->image) }}" width="100px;">
+                                        </div>
+
+                                        <div class="product__item__text" style="border-width: 5px;border-color:black;">
+                                            <h6 style="color: rgb(0, 255, 0);"><b>{{ $item->name }}</b></h6>
+                                            <a class="product__hover">
+
+                                                <button wire:click="addToCart({{ $item->id }})"
+                                                    style="color:rgb(7, 53, 255);border-width:0px;background-color:#FFFFFF;">
+                                                    <b>+ add to cart</b>
+                                                </button>
+                                            </a>
+
+                                            <h5>R{{ $item->price }}</h5>
+                                            <p style="color: rgb(89, 89, 89);">{{ $item->description }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endunless
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<!-- Banner Section End -->
+    </section>
+    <!-- Shop Section End -->
+</div>

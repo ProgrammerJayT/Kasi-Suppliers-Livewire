@@ -29,6 +29,8 @@
 
 <body>
     @livewire('partials.blackbar')
+    @livewire('partials.navbar')
+
     {{ $slot }}
 
     @livewireScripts
@@ -52,6 +54,62 @@
 
     <script src="https://cdn.jsdelivr.net/gh/livewire/turbolinks@v0.1.x/dist/livewire-turbolinks.js"
         data-turbolinks-eval="false" data-turbo-eval="false"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API_KEY') }}&libraries=places" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var autocomplete;
+            var id = 'enter-address';
+
+            autocomplete = new google.maps.places.Autocomplete((document.getElementById(id)), {
+                types: [
+                    'geocode',
+                ],
+                componentRestrictions: {
+                    country: "ZA"
+                },
+                fields: [
+                    'place_id',
+                    'geometry',
+                    'name',
+                ]
+            });
+
+            autocomplete.addListener('place_changed', function() {
+                var place = autocomplete.getPlace();
+
+                if (!place.geometry) {
+                    window.alert("Autocomplete's returned place contains no geometry");
+                    document.getElementById(id).value = '';
+                    return;
+                } else {
+
+                    console.log(JSON.stringify(place.address_components));
+
+                    var lat = place.geometry.location.lat();
+                    var lng = place.geometry.location.lng();
+                    var location = {
+                        lat: lat,
+                        lng: lng,
+                    };
+
+                    console.log(JSON.stringify(location));
+                    document.getElementById('set-address').value = JSON.stringify(location);
+                }
+            });
+        });
+    </script>
+    <script>
+        $('#acc').change(function() {
+            $('#location').attr('disabled', !this.checked)
+        });
+    </script>
+    <script>
+        Livewire.on('cartUpdated' => {
+            alert('A post was added with the id of: ');
+        })
+    </script>
 </body>
 
 </html>

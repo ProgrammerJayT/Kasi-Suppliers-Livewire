@@ -4,9 +4,9 @@
         <div class="col-lg-8 col-md-6">
             <h6 class="checkout__title">Registration Form</h6>
 
-            @if (Session::has('fail'))
+            @if (Session::has('error'))
                 <div class="alert alert-danger">
-                    {{ Session::get('fail') }}
+                    {{ Session::get('error') }}
                 </div>
             @endif
 
@@ -107,7 +107,7 @@
                     </li>
                     <li> </li>
                 </ul>
-                <button type="submit" class="site-btn">Register account</button>
+                <button wire:loading.attr="disabled" type="submit" class="site-btn">Register account</button>
             </div>
         </div>
     </div>

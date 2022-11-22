@@ -1,3 +1,7 @@
-@livewire('partials.navbar')
+@if ($privilege == 'vendor')
+    @livewire('user.profile.vendor')
+@endif
 
-<h1>{{ Request::route()->getName() }}</h1>
+@if ($privilege == 'customer')
+    @livewire('user.profile.customer')
+@endif

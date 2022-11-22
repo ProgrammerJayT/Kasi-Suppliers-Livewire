@@ -3,11 +3,15 @@
 use App\Http\Livewire\Auth\Admin;
 use App\Http\Livewire\Auth\Login;
 use App\Http\Livewire\Auth\Register;
+use App\Http\Livewire\Globals\Cart;
 use App\Http\Livewire\Globals\Home;
 use App\Http\Livewire\Globals\Dashboard;
 use App\Http\Livewire\Globals\Profile;
 use App\Http\Livewire\Globals\Shop;
 use App\Http\Livewire\Globals\Stock;
+use App\Http\Livewire\User\Order\Create;
+use App\Http\Livewire\User\Stock\Edit\Vendor;
+use App\Http\Livewire\User\Stock\Vendor as StockVendor;
 use App\Http\Livewire\User\Vendor\Stock\Edit;
 use App\Http\Middleware\Admin as MiddlewareAdmin;
 use App\Http\Middleware\CheckAuth;
@@ -41,8 +45,9 @@ Route::middleware(
             Route::get('/shop', Shop::class)->name('shop');
             Route::get('/wishlist', Profile::class)->name('wishlist');
             Route::get('/stock', Stock::class)->name('stock');
-            Route::get('/stock.edit', Edit::class)->name('stock.edit');
+            Route::get('/stock.edit', Vendor::class)->name('stock.edit');
             Route::get('/orders', Profile::class)->name('orders');
+            Route::get('/order.create', Create::class)->name('order.create');
             Route::get(
                 '/logout',
                 function () {
@@ -82,3 +87,4 @@ Route::middleware(
             Route::get('/register', Register::class)->name('register');
         }
     );
+Route::get('/cart', Cart::class)->name('cart');

@@ -50,7 +50,7 @@
                     <a href="" wire:click="adminPortal" class="site-btn"
                         style="background-color: blue;color:white;text-align:center;">Administrator Portal</a>
                 @else
-                    <button type="submit" class="site-btn"">Submit</button>
+                    <button wire:loading.attr="disabled" type="submit" class="site-btn"">Submit</button>
                 @endif
 
             </div>
