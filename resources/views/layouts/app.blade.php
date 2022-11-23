@@ -76,11 +76,15 @@
                 ]
             });
 
+            console.log(autocomplete);
+
             autocomplete.addListener('place_changed', function() {
                 var place = autocomplete.getPlace();
 
+                Livewire.emit('getAddress', autocomplete.getPlace());
+
                 if (!place.geometry) {
-                    window.alert("Autocomplete's returned place contains no geometry");
+                    // window.alert("Autocomplete's returned place contains no geometry");
                     document.getElementById(id).value = '';
                     return;
                 } else {
@@ -95,7 +99,7 @@
                     };
 
                     console.log(JSON.stringify(location));
-                    document.getElementById('set-address').value = JSON.stringify(location);
+                    Livewire.emit('getLatLng', location);
                 }
             });
         });
@@ -105,11 +109,7 @@
             $('#location').attr('disabled', !this.checked)
         });
     </script>
-    <script>
-        Livewire.on('cartUpdated' => {
-            alert('A post was added with the id of: ');
-        })
-    </script>
+
 </body>
 
 </html>

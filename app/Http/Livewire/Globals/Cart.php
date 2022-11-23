@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Globals;
 
+use App\Http\Controllers\OrderControl;
 use App\Models\Items;
 use Livewire\Component;
 
@@ -33,7 +34,7 @@ class Cart extends Component
         return back()->with('item-remove', 'Item removed from cart');
     }
 
-    public function clear()
+    public function clearCart()
     {
         $this->cartItems = array();
         $this->totalPrice = 0;
@@ -43,6 +44,27 @@ class Cart extends Component
         session()->pull('cart');
 
         $this->emitTo('partials.navbar', '$refresh');
+    }
+
+    public function createOrder()
+    {
+
+        //id	account_id	date	amount	num_items	is_delivery	status	created_at	updated_at
+
+        $createOrder = OrderControl::create([
+            'account_id' => session()->get('account')->id,
+            'date' => date('Y-m-d'),
+            'amount' => $this->totalPrice,
+            'num_items' => count($this->cartItems),
+            'status' => 'pending',
+        ]);
+
+        if ($createOrder->getStatusCode() == 201) {
+            $this->clearCart();
+            return redirect()->route('orders')->with('order-create', 'Order created successfully');
+        } else {
+            return back()->with('order-fail', 'Order creation failed. ' . $createOrder->getContent());
+        }
     }
 
     public function render()

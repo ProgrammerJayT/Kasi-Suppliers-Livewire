@@ -65,14 +65,6 @@
 
                                         <div class="product__item__pic set-bg">
                                             <img src="{{ asset($item->image) }}" width="100px;">
-                                            <ul class="product__hover">
-                                                <li>
-                                                    <button wire:click="delete({{ $item->id }})"
-                                                        style="color:red;border-width:0px;background-color:#FFFFFF;">
-                                                        <b>Delete</b>
-                                                    </button>
-                                                </li>
-                                            </ul>
                                         </div>
 
                                         <div class="product__item__text" style="border-width: 5px;border-color:black;">
@@ -80,8 +72,8 @@
                                             <a class="product__hover">
 
                                                 <button wire:click="edit({{ $item->id }})"
-                                                    style="color:rgb(255, 0, 200);border-width:0px;background-color:#FFFFFF;">
-                                                    <b>+ Edit +</b>
+                                                    style="color:rgb(7, 53, 255);border-width:0px;background-color:#FFFFFF;">
+                                                    <b>+ add to cart</b>
                                                 </button>
                                             </a>
 

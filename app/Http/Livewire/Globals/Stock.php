@@ -2,33 +2,99 @@
 
 namespace App\Http\Livewire\Globals;
 
+use App\Models\Items;
 use Livewire\Component;
+use App\Models\Categories;
+use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Request;
 
 class Stock extends Component
 {
-    public $route, $privilege, $name, $surname;
+    use WithFileUploads;
 
-    protected $listeners = [
-        'itemAddRemove' => 'render'
+    public $items, $categories, $itemCategory, $itemDescription, $itemName, $itemQuantity, $itemPrice, $itemImage;
+
+    public $newName, $newCategory, $newImage, $newDescription, $newPrice, $newQuantity, $search = '', $sort = 'price', $level = 'asc';
+
+    protected $rules = [
+        'itemCategory' => 'required',
+        'itemDescription' => 'required',
+        'itemName' => 'required',
+        'itemQuantity' => 'required',
+        'itemPrice' => 'required',
+        'itemImage' => 'required|image|max:1024000',
     ];
 
-    public function mount()
+    public function addItem()
     {
-        if (session()->has('adminTriggered')) {
-            $this->name = 'Login/Register';
-            $this->surname = 'Login/Register';
-            $this->privilege = 'admin';
-        } else {
-            $this->name = session()->get('profile')->name;
-            $this->surname = session()->get('profile')->surname;
-            $this->privilege = session()->get('account')->privilege;
+        $this->validate();
+
+        $imageUrlExplode = explode('.', $this->itemImage->getFilename());
+        $imageExplodeArrayCount = count($imageUrlExplode);
+        $imageExtension = $imageUrlExplode[$imageExplodeArrayCount - 1];
+
+        try {
+
+            $createItem = Items::create(
+                [
+                    'category_id' => $this->itemCategory,
+                    'vendor_id' => session()->get('profile')->id,
+                    'name' => $this->itemName,
+                    'quantity' => $this->itemQuantity,
+                    'description' => $this->itemDescription,
+                    'image' => 'img/vendor-stock/default',
+                    'price' => $this->itemPrice,
+                ]
+            );
+
+            if ($createItem) {
+                Items::find($createItem->id)->update(
+                    [
+                        'image' => $this->itemImage->storeAs('img/vendor-stock/' . session()->get('profile')->id, $createItem->id . '.' . $imageExtension),
+                    ]
+                );
+            }
+
+            $this->itemCategory = '';
+            $this->itemName = '';
+            $this->itemQuantity = '';
+            $this->itemDescription = '';
+            $this->itemPrice = '';
+
+            return back()->with('success', 'Item successfully added');
+
+        } catch (\Throwable $th) {
+            dd('failed. ' . $th->getMessage());
+            return back()->with('fail', $th->getMessage());
         }
-        $this->route = Request::route()->getName();
+    }
+
+    public function edit($id)
+    {
+        session()->put('editItem', $id);
+
+        if (session()->has('editItem')) {
+            return redirect()->route('stock.edit');
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            Items::find($id)->delete();
+            return back()->with('success', 'Item successfully deleted');
+        } catch (\Throwable $th) {
+            return back()->with('fail', 'Failed to delete item. ' . $th->getMessage());
+        }
     }
 
     public function render()
     {
+        $this->categories = Categories::all();
+        $this->items = Items::where('vendor_id', session()->get('profile')->id)
+            ->where('name', 'like', '%' . $this->search . '%')
+            ->orderBy($this->sort, $this->level)
+            ->get();
 
         return view('livewire.globals.stock');
     }

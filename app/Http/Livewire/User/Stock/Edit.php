@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Livewire\User\Stock\Edit;
+namespace App\Http\Livewire\User\Stock;
 
 use App\Models\Items;
 use Livewire\Component;
 use App\Models\Categories;
 use Livewire\WithFileUploads;
 
-class Vendor extends Component
+class Edit extends Component
 {
     use WithFileUploads;
 
@@ -92,6 +92,6 @@ class Vendor extends Component
     }
     public function render()
     {
-        return view('livewire.user.stock.edit.vendor');
+        return view('livewire.user.stock.edit');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Partials;
 
+use App\Models\Orders;
 use Livewire\Component;
 
 class Navbar extends Component
@@ -27,6 +28,8 @@ class Navbar extends Component
             $this->name = session()->get('profile')->name;
             $this->surname = session()->get('profile')->surname;
         }
+
+        $this->orders = Orders::where('account_id', session()->get('account')->id)->get()->count();
     }
 
     public function render()

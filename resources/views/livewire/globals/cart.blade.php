@@ -10,6 +10,12 @@
                 </div>
             @endif
 
+            @if (Session::has('order-fail'))
+                <div class="alert alert-danger" style="background-color: rgb(255, 0, 0);" role="alert">
+                    <p style="color:white;margin-bottom:0px">{{ Session::get('order-fail') }}</p>
+                </div>
+            @endif
+
             @unless(count($cartItems) > 0)
                 <div class="alert alert-warning">
                     <h4 class="alert-heading">No items in cart!</h4>
@@ -102,11 +108,11 @@
                                 <ul>
                                     <li>Total <span>R{{ $totalPrice }}</span></li>
                                 </ul>
-                                <a href="{{ route('order.create', [
-                                    'qty' => $quantity,
-                                    'total' => $totalPrice,
-                                ]) }}"
-                                    class="primary-btn">Create order</a>
+
+                                <button type="button" wire:click="createOrder"
+                                    style="width:100%;border-radius:20px;color:white;padding:5px;background-color:black;">Create
+                                    order</button>
+
                             </div>
                         </div>
                     @endunless
